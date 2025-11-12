@@ -1,0 +1,55 @@
+<MainScreen>:
+    # This BoxLayout is the root widget for the MainScreen
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 40
+        spacing: 20
+
+        # 1. A title label
+        Label:
+            text: "Emergency Shock Detector"
+            font_size: '28sp'
+            bold: True
+            halign: 'center'
+            size_hint_y: None
+            height: self.texture_size[1] + dp(20)
+
+        # 2. A status label
+        Label:
+            id: status_label
+            text: "Status: Initializing..."
+            font_size: '18sp'
+            halign: 'center'
+            color: (0.7, 0.7, 0.7, 1)
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding: (0, 20)
+
+        # 3. A box for the text input
+        BoxLayout:
+            size_hint_y: None
+            height: '50dp'
+            spacing: 10
+
+            Label:
+                text: "Contact:"
+                font_size: '16sp'
+                size_hint_x: 0.3
+                halign: 'right'
+                valign: 'middle'
+
+            TextInput:
+                id: phone_input
+                hint_text: 'Enter phone number'
+                font_size: '18sp'
+                size_hint_x: 0.7
+                multiline: False
+                input_type: 'tel'
+
+        # 4. The save button
+        Button:
+            text: "Save Contact"
+            font_size: '20sp'
+            size_hint_y: None
+            height: '50dp'
+            on_press: app.save_contact()
