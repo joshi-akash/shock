@@ -4,7 +4,6 @@
         padding: 40
         spacing: 20
 
-        # 1. A title label
         Label:
             text: "Emergency Shock Detector"
             font_size: '28sp'
@@ -13,7 +12,6 @@
             size_hint_y: None
             height: self.texture_size[1] + dp(20)
 
-        # 2. A status label
         Label:
             id: status_label
             text: "Status: Initializing..."
@@ -24,7 +22,6 @@
             height: self.texture_size[1]
             padding: (0, 20)
 
-        # 3. A box for the text input
         BoxLayout:
             size_hint_y: None
             height: '50dp'
@@ -45,7 +42,6 @@
                 multiline: False
                 input_type: 'tel'
 
-        # 4. The save button
         Button:
             text: "Save Contact"
             font_size: '20sp'
