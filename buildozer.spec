@@ -1,22 +1,22 @@
 [app]
 title = Shock Detector
 package.name = shockdetector
-package.domain = org.yourname
+package.domain = org.test
 source.dir = .
-source.include_exts = py, kv, png, jpg, jpeg, json, txt
-version = 1.0
-
-requirements = python3, kivy==2.3.1, plyer
+version = 0.3
 orientation = portrait
-fullscreen = 0
-android.permissions = CALL_PHONE, BODY_SENSORS, VIBRATE, WAKE_LOCK
-android.api = 34
-android.minapi = 27
-android.sdk = 24
+
+# Requirements: filetype (for crash fix), tts (for alarm), libffi_system (for build fix)
+requirements = python3,kivy==2.3.1,plyer,filetype,tts,libffi_system
+
+# Permissions: CALL_PHONE is critical
+android.permissions = INTERNET, ACCELEROMETER, CALL_PHONE
+
+# Build fixes
+android.javac_target_version = 17
 android.ndk = 25b
-android.archs = arm64-v8a, armeabi-v7a
-android.enable_androidx = True
-icon.filename = %(source.dir)s/icon.png
-android.wakelock = True
-source.exclude_exts = spec, pyc, pyo, orig, bak
-copy_private_data = False
+android.cmdline_tools_version = 8512546
+
+[buildozer]
+log_level = 2
+warn_on_root = 1
