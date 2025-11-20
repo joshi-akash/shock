@@ -1,41 +1,26 @@
-name: Build Android APK
+name: Build APK (Docker)
 on: [push]
 jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: '3.10' }
       
-      # Install only critical dependencies to save time
-      - name: Install Dependencies
+      # Create icon to prevent crashes
+      - name: Create Icon
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libtool automake autoconf nasm
+          wget https://raw.githubusercontent.com/kivy/kivy/master/kivy/data/logo/kivy-icon-64.png -O icon.png
 
-      - name: Install Buildozer
-        run: pip install buildozer cython==0.29.33
-
-      - name: Build APK (Plan B)
-        run: |
-          # Ensure icon exists
-          if [ ! -f icon.png ]; then wget https://raw.githubusercontent.com/kivy/kivy/master/kivy/data/logo/kivy-icon-64.png -O icon.png; fi
+      # Use the pre-made action (Fast)
+      - name: Build
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: master
           
-          # Delete old spec and create a fresh one
-          rm -f buildozer.spec
-          yes | buildozer init
-          
-          # Inject your specific settings into the fresh file
-          sed -i 's/requirements = python3,kivy/requirements = python3,kivy==2.3.1,plyer/' buildozer.spec
-          sed -i 's/android.permissions = INTERNET/android.permissions = CALL_PHONE,BODY_SENSORS,VIBRATE,WAKE_LOCK/' buildozer.spec
-          sed -i 's/#android.api = 27/android.api = 33/' buildozer.spec
-          sed -i 's/#android.ndk = 23b/android.ndk = 25b/' buildozer.spec
-          
-          # Run the build and force "yes" to all prompts
-          yes | buildozer -v android debug
-      
-      - uses: actions/upload-artifact@v4
+      - name: Upload
+        uses: actions/upload-artifact@v4
         with:
           name: package
           path: bin/*.apk
